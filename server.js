@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { connectDB } from './SRC/DB/database.js';
+import router from './SRC/routes/index.js';
 dotenv.config()
 
 const app = express()
@@ -10,6 +11,7 @@ const app = express()
 app.use(cors({origin:'*'}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use('/api/v1/', router)
 
 
 const startServer = async () => {

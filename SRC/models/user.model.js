@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    fistName: {
+    firstName: {
         type: String,
         required: true,
     },
@@ -16,10 +16,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     phoneNumber: {
         type: Number,
         required: true,
+        unique: true
     },
     address: {
         type: String,
