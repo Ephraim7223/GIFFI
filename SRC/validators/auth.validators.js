@@ -17,7 +17,7 @@ export const signUpValidator = z.object({
         .min(5,{message: 'Password should not be less than 5 characters'})
         .max(12,{message: 'Password should not be more than 12 characters'}),
     phoneNumber: z
-        .number({message:'enter phoneNumber'})
+        .string({message:'enter phoneNumber'})
         .min(11,{message: 'phoneNumber should not be less than 11 characters'})
         .max(11,{message: 'phoneNumber should not be more than 11 characters'}),
     gender:z.string({message:'enter gender'}),
