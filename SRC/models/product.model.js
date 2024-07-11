@@ -1,30 +1,50 @@
 import mongoose from "mongoose";
+import { status } from "./enums.js";
 
 const productsSchema = new mongoose.Schema({
     name: {
-
+        type: String,
+        required: true,
+        unique: true
     },
     description: {
-
+        type: String,
+        required: true,
+        default: ''
     },
     price: {
-
+        type: Number,
+        required: true,
     },
     quantity: {
-
+        type: Number,
+        required: true,
     },
     status: {
-
+        type: String,
+        enum: status,
+        required :true
     },
-    discount: {
-
-    },
-    image: {
-
-    },
-    review: {
-
-    }
+    image: [{
+        type: String,
+        required: true
+    }],
+    review: [{
+        type: String,
+        user: {
+            userId: mongoose.Types.ObjectId,
+            ref: 'User'
+        }
+    }],
+    rating: [{
+        type: Number,
+        min: [1],
+        max: [5],
+        user: {
+            userId: mongoose.Types.ObjectId,
+            ref: 'User'
+        }
+    }]
 },{
     timestamps: true
 })
