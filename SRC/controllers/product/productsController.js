@@ -1,7 +1,16 @@
 import { cloudinaryMediaUpload } from "../../config/cloudinary.js"
 import Product from "../../models/product.model.js"
+import { formatZodError } from "../../utilities/error.js"
 import { addProductValidator } from "../../validators/product.validator.js"
+import { v2 as cloudinary } from 'cloudinary'
+import dotenv from 'dotenv'
+dotenv.config()
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
 export const addProduct = async (req, res) => {
     const addProductResults = addProductValidator.safeParse(req.body)
@@ -10,31 +19,31 @@ export const addProduct = async (req, res) => {
     }
     try {
         const {name, description, price, status, quantity} = req.body
-        const files = req.files
+        let image = req.file
         const product = await Product.findOne({name})
         if (product) {
            return res.status(409).json({message: `Product with name: ${name} already exists`})
         }
-        if (!files || files.length === 0) {
+        if (!image || image.length === 0) {
           return  res.status(404).json({message: 'At least one image is required'})
         }
-        const uploadedImages = await Promise.all(files.map(async (file) => {
-            const result = await cloudinaryMediaUpload(file.path, 'image')
-            return result.url
-        }))
+        const uploadedImages = await cloudinaryMediaUpload(req.file.path, 'products')
+        image = uploadedImages.url
 
         const newProduct = new Product ({
             name,
             description,
             price,
-            image: uploadedImages,
+            image,
             quantity,
             status,
         })
         await newProduct.save()
-        res.status(200).json({message: 'Product Saved successfully'})
+        console.log('Product Saved successfully', newProduct);
+        res.status(200).json({message: 'Product Saved successfully', newProduct})
     } catch (error) {
-        
+        console.error(error);
+        res.status(500).json({error: error.message})
     }
 }
 export const getSingleProduct = async (req, res) => {}

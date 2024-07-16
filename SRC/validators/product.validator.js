@@ -10,13 +10,11 @@ export const addProductValidator = z.object({
         .min(1,{})
         .max(1000,{}),
     price: z
-        .number({message: 'Price is required'})
+        .string({message: 'Price is required'})
         .min(1,{}),
     quantity: z
-        .number({message: 'Quantity is required'})
+        .string({message: 'Quantity is required'})
         .min(1,{}),
     status: z
         .string({message: 'Status is required'}),
-    image: z 
-        .string({message: 'Image is required'})
 }).required({message: 'All fields are required'})
