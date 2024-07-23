@@ -46,7 +46,27 @@ export const addProduct = async (req, res) => {
         res.status(500).json({error: error.message})
     }
 }
-export const getSingleProduct = async (req, res) => {}
-export const getAllProducts = async (req, res) => {}
+export const getSingleProduct = async (req, res) => {
+    try {
+        const products = await Product.findById({id: req.params.id})
+        if (!products) {
+            res.status(404).json({message: 'No products found'})
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+        console.log(error);
+    }
+}
+export const getAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find()
+        if (!products) {
+            res.status(404).json({message: 'No products found'})
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+        console.log(error);
+    }
+}
 export const deleteProduct = async (req, res) => {}
 export const updateProduct = async (req, res) => {}
