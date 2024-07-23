@@ -32,7 +32,7 @@ export const mailTransport = async (from, to, subject, html, attachments) => {
             if (err) {
                 return reject(err)
             }
-            console.log(`Mail sent to [${to}] with response: ${info.response}`);
+            console.log(`Mail sent to [${to}] with response: ${info.response} 🐸🐸🐸🐸🐸`);
             resolve (info)
         })
     })
