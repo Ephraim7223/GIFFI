@@ -57,6 +57,7 @@ export const getSingleProduct = async (req, res) => {
         console.log(error);
     }
 }
+
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find()
@@ -68,5 +69,23 @@ export const getAllProducts = async (req, res) => {
         console.log(error);
     }
 }
-export const deleteProduct = async (req, res) => {}
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById({id: req.params.id})
+        if (!product) {
+            res.status(404).json({message: 'No products found'})
+        }
+        if (product.image) {
+            const imageId = product.image.split('/').pop().split('.')[0]
+            await cloudinary.uploader.destroy(imageId)
+        }
+        await Product.findByIdAndDelete(product)
+        res.status(200).json({message: 'Product deleted successfully', data: product, error: null})
+    } catch (error) {
+        res.status(500).json({message: error.message})
+        console.log(error);
+    }
+}
+
 export const updateProduct = async (req, res) => {}

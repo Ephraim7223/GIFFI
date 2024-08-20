@@ -1,8 +1,9 @@
 import User from "../../models/user.model.js";
 import { signUpValidator, loginValidator } from "../../validators/auth.validators.js"
 import { formatZodError } from "../../utilities/error.js";
-import { comparePasswords, hashValue } from "../../utilities/hashValue.js";
+import { comparePasswords, generateRandomNumber, hashValue } from "../../utilities/hashValue.js";
 import { generateToken } from "../../utilities/generateToken.js";
+import { otpGeneration } from "../../templates/otp.js";
 
 export const signUp = async (req, res) => {
     const signUpResults = signUpValidator.safeParse(req.body)
@@ -61,7 +62,6 @@ export const logIn = async (req, res) => {
         const {email ,password} = req.body
         const user = await User.findOne({email})
         if (!user) {
-            email, phoneNumber, password, firstName, lastNameemail, phoneNumber, password, firstName, lastNameconsole.debug(`user with ${email} not found`)
             return res.status(404).json({message: `user with ${email} not found`})
         }
         const comparePw = comparePasswords(password, user.password)
@@ -75,3 +75,23 @@ export const logIn = async (req, res) => {
         console.error(error.message)
     }
 }
+
+export const forgetPassword = async (req, res) => {
+    try {
+        const {email} = req.body
+        const user = await User.findOne({email})
+        if (!user) {
+            res.status(404).json({message:`user with: ${email} not found`, data: user, error: true})
+        }
+        const randomOtp = generateRandomNumber(2)
+        user.otp = randomOtp;
+        await  otpGeneration(user.email, user.otp)
+        await user.save()
+        res.status(200).json({message: 'otp sent successfully'})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: error.message})
+    }
+}
+
+export const resetPassword = async (req, res) => {}
