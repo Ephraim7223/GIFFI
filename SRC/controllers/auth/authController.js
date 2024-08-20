@@ -98,4 +98,5 @@ export const resetPassword = async (req, res) => {}
 // check if the otp belongs to a user
 // otp
 // newPassword that will update the oldPassword
+// delete the otp and return to null when successfull
 // email for success
