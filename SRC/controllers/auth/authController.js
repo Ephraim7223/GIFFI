@@ -95,3 +95,7 @@ export const forgetPassword = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {}
+// check if the otp belongs to a user
+// otp
+// newPassword that will update the oldPassword
+// email for success
